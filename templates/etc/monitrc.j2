@@ -1,0 +1,31 @@
+# {{ ansible_managed }}
+
+set daemon {{ monit_daemon.cycle }}
+{% if monit_daemon.delay | int > 0 %}
+  with start delay {{ monit_daemon.delay }}
+{% endif %}
+
+set log syslog
+set logfile {{ monit_log_destination }}
+set statefile {{ monit_state_file }}
+set idfile {{ monit_id_file }}
+
+# set limits {
+#     programOutput:     512 B,      # check program's output truncate limit
+#     sendExpectBuffer:  256 B,      # limit for send/expect protocol test
+#     fileContentBuffer: 512 B,      # limit for file content test
+#     httpContentBuffer: 1 MB,       # limit for HTTP content test
+#     networkTimeout:    5 seconds   # timeout for network I/O
+#     programTimeout:    300 seconds # timeout for check program
+#     stopTimeout:       30 seconds  # timeout for service stop
+#     startTimeout:      30 seconds  # timeout for service start
+#     restartTimeout:    30 seconds  # timeout for service restart
+# }
+
+{% if monit_eventqueue is defined and monit_eventqueue.enabled is defined and monit_eventqueue.enabled %}
+set eventqueue
+  basedir {{ monit_eventqueue.base_directory | default('/var/lib/monit/events') }}
+  slots {{ monit_eventqueue.slots | default(100) }}
+{% endif %}
+
+include {{ monit_includes }}/*

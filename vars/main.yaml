@@ -1,0 +1,38 @@
+---
+
+monit_service: monit
+monitrc_conf: ""
+monit_includes: ""
+
+monit_defaults_daemon:
+  cycle: 120
+  delay: 30
+
+monit_defaults_eventqueue:
+  enabled: false
+  base_directory: /var/monit
+  slots: 100
+
+monit_defaults_mail:
+  enabled: false
+  host: localhost
+  port: 25
+  user: ''
+  password: ''
+  ssl_version: ''
+  timeout: 5
+
+monit_defaults_alert:
+  alert_addresses: []
+  mail_format: {}
+
+monit_defaults_webinterface:
+  enabled: false
+  port: 2812
+  bind: "127.0.0.1"
+  acl_rules:
+    - "127.0.0.1"
+  rw_group: ''
+  r_group: ''
+
+...

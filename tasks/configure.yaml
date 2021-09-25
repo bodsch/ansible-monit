@@ -1,0 +1,98 @@
+---
+
+- name: create includes folder
+  file:
+    path: "{{ monit_includes }}"
+    state: directory
+    mode: 0640
+
+- name: create lib folder
+  file:
+    path: "{{ monit_lib_folder }}"
+    state: directory
+    mode: 0600
+
+- name: create monitrc
+  template:
+    src: etc/monitrc.j2
+    dest: "{{ monitrc_conf }}"
+    owner: root
+    group: root
+    mode: 0700
+    backup: true
+  notify:
+    - reload monit
+
+- name: create config for webinterface
+  template:
+    src: etc/monit.d/webinterface.j2
+    dest: "{{ monit_includes }}/webinterface"
+    owner: root
+    group: root
+    mode: 0644
+  when:
+    - monit_webinterface is defined
+    - monit_webinterface.enabled is defined
+    - monit_webinterface.enabled
+  notify:
+    - reload monit
+
+- name: create config for mail alerts
+  template:
+    src: etc/monit.d/mail.j2
+    dest: "{{ monit_includes }}/mail"
+    owner: root
+    group: root
+    mode: 0644
+  when:
+    - monit_mail is defined
+    - monit_mail.enabled is defined
+    - monit_mail.enabled
+  notify:
+    - reload monit
+
+- block:
+    - name: create monit monitors
+      template:
+        src: etc/monit.d/monitor.j2
+        dest: "{{ monit_includes }}/{{ item.name }}"
+        owner: root
+        group: root
+      loop: "{{ monit_services }}"
+      loop_control:
+        label: "{{ item.name }}"
+      notify:
+        - reload monit
+
+    - name: create facts for configured monitors
+      template:
+        src: "etc/facts.d/monit.facts.j2"
+        dest: "/etc/ansible/facts.d/monit.fact"
+        mode: 0755
+
+    - name: get latest system information
+      setup:
+        filter: "ansible_local"
+
+    - name: get configured monitors
+      command: |
+        ls -1 {{ monit_includes }}
+      register: monit_services_present
+      changed_when: false
+
+    - name: remove unused monitors
+      file:
+        path: "{{ monit_includes }}/{{ item }}"
+        state: absent
+      with_items: "{{ monit_services_present.stdout_lines | default([]) }}"
+      when:
+        - monit_service_delete_unlisted
+        - item | basename not in ansible_local.monit.configured_services
+      notify:
+        - reload monit
+
+  when:
+    - monit_services is defined
+    - monit_services | count > 0
+
+...

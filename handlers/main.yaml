@@ -1,0 +1,13 @@
+---
+
+- name: restart monit
+  service:
+    name: "{{ monit_service }}"
+    state: restarted
+
+- name: reload monit
+  service:
+    name: "{{ monit_service }}"
+    state: reloaded
+
+...

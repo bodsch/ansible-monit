@@ -1,0 +1,8 @@
+---
+
+- name: install monit packages
+  package:
+    name: "{{ monit_packages }}"
+    state: present
+
+...

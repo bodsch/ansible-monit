@@ -1,0 +1,34 @@
+---
+
+monit_daemon:
+  cycle: 120
+  delay: 240
+
+monit_log_destination: /var/log/monit.log
+monit_lib_folder: /var/lib/monit
+monit_state_file: "{{ monit_lib_folder }}/state"
+monit_id_file: "{{ monit_lib_folder }}/id"
+
+monit_services: []
+monit_service_delete_unlisted: true
+
+monit_eventqueue:
+  enabled: false
+  base_directory: /var/monit
+  slots: 100
+
+monit_mail:
+  enabled: false
+  server_host: localhost
+  server_port: 25
+
+monit_alert:
+  alert_addresses: []
+  mail_format: {}
+
+monit_webinterface:
+  enabled: false
+  bind: 127.0.0.1
+  port: 2812
+
+...

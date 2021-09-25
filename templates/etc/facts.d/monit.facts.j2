@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+cat <<EOF
+{
+  "configured_services": [
+{% if monit_mail.enabled %}
+    "mail",
+{% endif %}
+{% if monit_webinterface.enabled %}
+    "webinterface",
+{% endif %}
+{% for service in monit_services %}
+    "{{ service.name }}"{% if not loop.last %}, {% endif %}
+{% endfor %}
+
+  ]
+}
+EOF

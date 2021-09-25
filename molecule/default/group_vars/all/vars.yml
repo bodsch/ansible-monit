@@ -1,0 +1,24 @@
+---
+
+monit_daemon:
+  cycle: 240
+  delay: 0
+
+monit_services:
+  - type: 'process'
+    name: sshd
+    target: '/run/sshd.pid'
+    start: '/etc/init.d/sshd start'
+    stop: '/etc/init.d/sshd stop'
+    restart: '/etc/init.d/sshd restart'
+    rules:
+      - if failed port 22 protocol ssh then restart
+
+monit_webinterface:
+  enabled: true
+  bind: 127.0.0.1
+  port: 2812
+  acl_rules:
+    - foo:bar
+
+...
