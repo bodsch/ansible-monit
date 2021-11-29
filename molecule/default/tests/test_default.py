@@ -52,10 +52,10 @@ def get_vars(host):
 
 def test_installed_package(host):
     p = host.package("monit")
-    assert not p.is_installed
+    assert p.is_installed
 
 
 def test_service(host):
     service = host.service("monit")
-    assert not service.is_enabled
-    assert not service.is_running
+    assert service.is_enabled
+    assert service.is_running
