@@ -8,11 +8,19 @@ monit_services:
   - type: 'process'
     name: sshd
     target: '/run/sshd.pid'
-    start: '/etc/init.d/sshd start'
-    stop: '/etc/init.d/sshd stop'
-    restart: '/etc/init.d/sshd restart'
+    start:   "{{ '/bin/systemctl start sshd'   if ansible_service_mgr | lower == 'systemd' else '/etc/init.d/sshd start' }}"
+    stop:    "{{ '/bin/systemctl stop sshd'    if ansible_service_mgr | lower == 'systemd' else '/etc/init.d/sshd stop' }}"
+    restart: "{{ '/bin/systemctl restart sshd' if ansible_service_mgr | lower == 'systemd' else '/etc/init.d/sshd restart' }}"
     rules:
       - if failed port 22 protocol ssh then restart
+  - type: 'process'
+    name: monit
+    target: '/run/monit.pid'
+    start:   "{{ '/bin/systemctl start monit'   if ansible_service_mgr | lower == 'systemd' else '/etc/init.d/monit start' }}"
+    stop:    "{{ '/bin/systemctl stop monit'    if ansible_service_mgr | lower == 'systemd' else '/etc/init.d/monit stop' }}"
+    restart: "{{ '/bin/systemctl restart monit' if ansible_service_mgr | lower == 'systemd' else '/etc/init.d/monit restart' }}"
+    rules:
+      - if failed host 127.0.0.1 port 2812 protocol http then restart
 
 monit_webinterface:
   enabled: true

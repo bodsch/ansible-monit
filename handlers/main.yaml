@@ -10,4 +10,8 @@
     name: "{{ monit_service }}"
     state: reloaded
 
+- name: validate config
+  command: |
+    monit -t
+
 ...

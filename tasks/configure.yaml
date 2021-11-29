@@ -20,7 +20,9 @@
     group: root
     mode: 0700
     backup: true
+    #validate: monit validate -c %s
   notify:
+    - validate config
     - reload monit
 
 - name: create config for webinterface
@@ -30,11 +32,13 @@
     owner: root
     group: root
     mode: 0644
+    #validate: monit validate -c %s
   when:
     - monit_webinterface is defined
     - monit_webinterface.enabled is defined
     - monit_webinterface.enabled
   notify:
+    - validate config
     - reload monit
 
 - name: create config for mail alerts
@@ -44,11 +48,13 @@
     owner: root
     group: root
     mode: 0644
+    #validate: monit validate -c %s
   when:
     - monit_mail is defined
     - monit_mail.enabled is defined
     - monit_mail.enabled
   notify:
+    - validate config
     - reload monit
 
 - block:
@@ -63,6 +69,7 @@
       loop_control:
         label: "{{ item.name }}"
       notify:
+        - validate config
         - reload monit
 
     - name: create facts for configured monitors
@@ -90,6 +97,7 @@
         - monit_service_delete_unlisted
         - item | basename not in ansible_local.monit.configured_services
       notify:
+        - validate config
         - reload monit
 
   when:

@@ -5,7 +5,7 @@ set daemon {{ monit_daemon.cycle }}
   with start delay {{ monit_daemon.delay }}
 {% endif %}
 
-set log syslog
+# set log syslog
 set logfile {{ monit_log_destination }}
 set statefile {{ monit_state_file }}
 set idfile {{ monit_id_file }}
