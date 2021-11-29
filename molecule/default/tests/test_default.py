@@ -50,33 +50,12 @@ def get_vars(host):
     return result
 
 
-@pytest.mark.parametrize("dirs", [
-    "/etc/apparmor",
-    "/etc/apparmor.d",
-    "/usr/lib/apparmor",
-    "/var/lib/snapd/apparmor",
-    "/var/cache/apparmor"
-])
-def test_directories(host, dirs):
-    d = host.file(dirs)
-    assert not d.exists
-
-
-@pytest.mark.parametrize("files", [
-    "/etc/init.d/apparmor",
-    "/etc/systemd/system/apparmor.service"
-])
-def test_files(host, files):
-    f = host.file(files)
-    assert not f.exists
-
-
 def test_installed_package(host):
-    p = host.package("apparmor")
+    p = host.package("monit")
     assert not p.is_installed
 
 
 def test_service(host):
-    service = host.service("apparmor")
+    service = host.service("monit")
     assert not service.is_enabled
     assert not service.is_running
