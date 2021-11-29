@@ -8,4 +8,3 @@ monitrc_conf: /etc/monitrc
 monit_includes: /etc/monit.d
 
 ...
-

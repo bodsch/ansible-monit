@@ -58,6 +58,7 @@
         dest: "{{ monit_includes }}/{{ item.name }}"
         owner: root
         group: root
+        mode: 0644
       loop: "{{ monit_services }}"
       loop_control:
         label: "{{ item.name }}"
