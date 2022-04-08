@@ -16,11 +16,14 @@ Installs and configure a monit on varoius linux systems.
 
 ## tested operating systems
 
-* Debian 9 / 10
-* Ubuntu 18.04 / 20.04
-* CentOS 7 / 8
-* Oracle Linux 7 / 8
-* Arch Linux
+* ArchLinux
+* Debian based
+    - Debian 10 / 11
+    - Ubuntu 20.04
+* RedHat based
+    - Alma Linux 8
+    - Rocky Linux 8
+    - OracleLinux 8
 
 ## usage
 
