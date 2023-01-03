@@ -1,38 +1,36 @@
 ---
 
 - name: create includes folder
-  file:
+  ansible.builtin.file:
     path: "{{ monit_includes }}"
     state: directory
-    mode: 0640
+    mode: 0750
 
 - name: create lib folder
-  file:
+  ansible.builtin.file:
     path: "{{ monit_lib_folder }}"
     state: directory
-    mode: 0600
+    mode: 0750
 
 - name: create monitrc
-  template:
+  ansible.builtin.template:
     src: etc/monitrc.j2
     dest: "{{ monitrc_conf }}"
     owner: root
     group: root
     mode: 0700
     backup: true
-    #validate: monit validate -c %s
   notify:
     - validate config
     - reload monit
 
 - name: create config for webinterface
-  template:
+  ansible.builtin.template:
     src: etc/monit.d/webinterface.j2
     dest: "{{ monit_includes }}/webinterface"
     owner: root
     group: root
     mode: 0644
-    #validate: monit validate -c %s
   when:
     - monit_webinterface is defined
     - monit_webinterface.enabled is defined
@@ -42,13 +40,12 @@
     - reload monit
 
 - name: create config for mail alerts
-  template:
+  ansible.builtin.template:
     src: etc/monit.d/mail.j2
     dest: "{{ monit_includes }}/mail"
     owner: root
     group: root
     mode: 0644
-    #validate: monit validate -c %s
   when:
     - monit_mail is defined
     - monit_mail.enabled is defined
@@ -57,9 +54,13 @@
     - validate config
     - reload monit
 
-- block:
+- name: monit configuration
+  when:
+    - monit_services is defined
+    - monit_services | count > 0
+  block:
     - name: create monit monitors
-      template:
+      ansible.builtin.template:
         src: etc/monit.d/monitor.j2
         dest: "{{ monit_includes }}/{{ item.name }}"
         owner: root
@@ -73,23 +74,23 @@
         - reload monit
 
     - name: create facts for configured monitors
-      template:
+      ansible.builtin.template:
         src: "etc/facts.d/monit.facts.j2"
         dest: "/etc/ansible/facts.d/monit.fact"
         mode: 0755
 
     - name: get latest system information
-      setup:
+      ansible.builtin.setup:
         filter: "ansible_local"
 
     - name: get configured monitors
-      command: |
+      ansible.builtin.command: |
         ls -1 {{ monit_includes }}
       register: monit_services_present
       changed_when: false
 
     - name: remove unused monitors
-      file:
+      ansible.builtin.file:
         path: "{{ monit_includes }}/{{ item }}"
         state: absent
       with_items: "{{ monit_services_present.stdout_lines | default([]) }}"
@@ -99,9 +100,5 @@
       notify:
         - validate config
         - reload monit
-
-  when:
-    - monit_services is defined
-    - monit_services | count > 0
 
 ...

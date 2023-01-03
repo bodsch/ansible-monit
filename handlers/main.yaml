@@ -1,17 +1,17 @@
 ---
 
 - name: restart monit
-  service:
+  ansible.builtin.service:
     name: "{{ monit_service }}"
     state: restarted
 
 - name: reload monit
-  service:
+  ansible.builtin.service:
     name: "{{ monit_service }}"
     state: reloaded
 
 - name: validate config
-  command: |
+  ansible.builtin.command: |
     monit -t
 
 ...

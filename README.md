@@ -2,16 +2,18 @@
 # Ansible Role:  `monit`
 
 
-Installs and configure a monit on varoius linux systems.
+Installs and configure a monit on various linux systems.
 
 
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/bodsch/ansible-monit/CI)][ci]
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/bodsch/ansible-monit/main.yml?branch=main)][ci]
 [![GitHub issues](https://img.shields.io/github/issues/bodsch/ansible-monit)][issues]
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/bodsch/ansible-monit)][releases]
+[![Ansible Quality Score](https://img.shields.io/ansible/quality/50067?label=role%20quality)][quality]
 
 [ci]: https://github.com/bodsch/ansible-monit/actions
 [issues]: https://github.com/bodsch/ansible-monit/issues?q=is%3Aopen+is%3Aissue
 [releases]: https://github.com/bodsch/ansible-monit/releases
+[quality]: https://galaxy.ansible.com/bodsch/monit
 
 
 ## tested operating systems
