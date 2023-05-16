@@ -13,5 +13,8 @@
 - name: validate config
   ansible.builtin.command: |
     monit -t
+  register: monit_validate
+  changed_when: monit_validate.rc != 0
+  failed_when: monit_validate.rc != 0
 
 ...
