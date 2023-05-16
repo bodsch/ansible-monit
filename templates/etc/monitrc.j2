@@ -1,3 +1,4 @@
+#jinja2: trim_blocks: True, lstrip_blocks: True
 # {{ ansible_managed }}
 
 set daemon {{ monit_daemon.cycle }}
@@ -22,7 +23,9 @@ set idfile {{ monit_id_file }}
 #     restartTimeout:    30 seconds  # timeout for service restart
 # }
 
-{% if monit_eventqueue is defined and monit_eventqueue.enabled is defined and monit_eventqueue.enabled %}
+{% if monit_eventqueue is defined and
+      monit_eventqueue.enabled is defined and
+      monit_eventqueue.enabled | bool %}
 set eventqueue
   basedir {{ monit_eventqueue.base_directory | default('/var/lib/monit/events') }}
   slots {{ monit_eventqueue.slots | default(100) }}

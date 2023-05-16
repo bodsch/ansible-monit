@@ -54,46 +54,52 @@
     - validate config
     - reload monit
 
-- name: monit configuration
+- name: create monit monitors
+  ansible.builtin.template:
+    src: etc/monit.d/monitor.j2
+    dest: "{{ monit_includes }}/{{ item.name }}"
+    owner: root
+    group: root
+    mode: 0644
+  loop: "{{ monit_services }}"
+  loop_control:
+    label: "{{ item.name }}"
   when:
-    - monit_services is defined
-    - monit_services | count > 0
+    - monit_services | default([]) | count > 0
+  notify:
+    - validate config
+    - reload monit
+
+- name: create custom fact file
+  bodsch.core.facts:
+    name: monit
+    facts:
+      configured_services: "{{ monit_services | services(monit_mail, monit_webinterface) }}"
+
+- name: delete unlisted monit monitors
+  when:
+    - monit_service_delete_unlisted
   block:
-    - name: create monit monitors
-      ansible.builtin.template:
-        src: etc/monit.d/monitor.j2
-        dest: "{{ monit_includes }}/{{ item.name }}"
-        owner: root
-        group: root
-        mode: 0644
-      loop: "{{ monit_services }}"
-      loop_control:
-        label: "{{ item.name }}"
-      notify:
-        - validate config
-        - reload monit
-
-    - name: create facts for configured monitors
-      ansible.builtin.template:
-        src: "etc/facts.d/monit.facts.j2"
-        dest: "/etc/ansible/facts.d/monit.fact"
-        mode: 0755
-
     - name: get latest system information
       ansible.builtin.setup:
         filter: "ansible_local"
 
-    - name: get configured monitors
-      ansible.builtin.command: |
-        ls -1 {{ monit_includes }}
-      register: monit_services_present
-      changed_when: false
+    - name: find current configured monit monitors
+      ansible.builtin.find:
+        paths: "{{ monit_includes }}"
+        file_type: file
+        recurse: false
+      register: _detected_services
+
+    - name: define monit_services_present
+      ansible.builtin.set_fact:
+        monit_services_present: "{{ _detected_services | configured_monitors(monit_includes) }}"
 
     - name: remove unused monitors
       ansible.builtin.file:
         path: "{{ monit_includes }}/{{ item }}"
         state: absent
-      with_items: "{{ monit_services_present.stdout_lines | default([]) }}"
+      with_items: "{{ monit_services_present | default([]) }}"
       when:
         - monit_service_delete_unlisted
         - item | basename not in ansible_local.monit.configured_services

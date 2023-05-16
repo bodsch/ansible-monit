@@ -1,27 +1,30 @@
+#jinja2: trim_blocks: True, lstrip_blocks: True
 # {{ ansible_managed }}
 
-{% if monit_mail is defined and monit_mail.enabled is defined and monit_mail.enabled %}
+{% if monit_mail is defined and
+      monit_mail.enabled is defined and
+      monit_mail.enabled | bool %}
 
 set mailserver {{ monit_mail.host }} port {{ monit_mail.port }}
-  {% if monit_mail.user is defined and monit_mail.password is defined -%}
+  {% if monit_mail.user is defined and monit_mail.password is defined %}
   username "{{ monit_mail.user }}" password "{{ monit_mail.password }}"
-  {% endif -%}
-  {% if monit_mail.ssl_version is defined -%}
+  {% endif %}
+  {% if monit_mail.ssl_version is defined %}
   using {{ monit_mail.ssl_version }}
-  {% endif -%}
+  {% endif %}
   with timeout {{ monit_mail.timeout | default(5) }} seconds
 
-{% for address in monit_alert.addresses %}
+  {% for address in monit_alert.addresses %}
 set alert {{ address }}
-{% endfor -%}
+  {% endfor %}
 
-{% if monit_alert.mail_format is defined -%}
+  {% if monit_alert.mail_format is defined %}
 set mail-format {
-{% for key in ['from', 'reply-to', 'subject', 'message'] -%}
-{% if monit_alert.mail_format[key] is defined %}
+    {% for key in ['from', 'reply-to', 'subject', 'message'] %}
+      {% if monit_alert.mail_format[key] is defined %}
   {{ key }}: {{ monit_alert.mail_format[key] }}
-{% endif %}
-{% endfor -%}
+      {% endif %}
+    {% endfor %}
 }
-{% endif -%}
+  {% endif %}
 {% endif %}

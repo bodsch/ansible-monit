@@ -15,6 +15,19 @@ Installs and configure a monit on various linux systems.
 [releases]: https://github.com/bodsch/ansible-monit/releases
 [quality]: https://galaxy.ansible.com/bodsch/monit
 
+## Requirements & Dependencies
+
+Ansible Collections
+
+- [bodsch.core](https://github.com/bodsch/ansible-collection-core)
+
+```bash
+ansible-galaxy collection install bodsch.core
+```
+or
+```bash
+ansible-galaxy collection install --requirements-file collections.yml
+```
 
 ## tested operating systems
 
