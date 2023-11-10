@@ -35,10 +35,9 @@ ansible-galaxy collection install --requirements-file collections.yml
 * Debian based
     - Debian 10 / 11
     - Ubuntu 20.04
-* RedHat based
-    - Alma Linux 8
-    - Rocky Linux 8
-    - OracleLinux 8
+
+> **RedHat-based systems are no longer officially supported! May work, but does not have to.**
+
 
 ## usage
 
@@ -108,4 +107,4 @@ curl -u foo:bar "localhost:2812/_status?format=json&level=full"
 
 [Apache](LICENSE)
 
-`FREE SOFTWARE, HELL YEAH!`
+**FREE SOFTWARE, HELL YEAH!**
