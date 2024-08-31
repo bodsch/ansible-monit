@@ -5,17 +5,12 @@ __metaclass__ = type
 
 from ansible.utils.display import Display
 
-# https://docs.ansible.com/ansible/latest/dev_guide/developing_plugins.html
-# https://blog.oddbit.com/post/2019-04-25-writing-ansible-filter-plugins/
-
 display = Display()
 
 
 class FilterModule(object):
     """
-        Ansible file jinja2 tests
     """
-
     def filters(self):
         return {
             'has_valid_values': self.has_values,
