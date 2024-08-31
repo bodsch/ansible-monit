@@ -8,12 +8,12 @@ Installs and configure a monit on various linux systems.
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/bodsch/ansible-monit/main.yml?branch=main)][ci]
 [![GitHub issues](https://img.shields.io/github/issues/bodsch/ansible-monit)][issues]
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/bodsch/ansible-monit)][releases]
-[![Ansible Quality Score](https://img.shields.io/ansible/quality/50067?label=role%20quality)][quality]
+[![Ansible Downloads](https://img.shields.io/ansible/role/d/bodsch/monit?logo=ansible)][galaxy]
 
 [ci]: https://github.com/bodsch/ansible-monit/actions
 [issues]: https://github.com/bodsch/ansible-monit/issues?q=is%3Aopen+is%3Aissue
 [releases]: https://github.com/bodsch/ansible-monit/releases
-[quality]: https://galaxy.ansible.com/bodsch/monit
+[galaxy]: https://galaxy.ansible.com/ui/standalone/roles/bodsch/monit/
 
 ## Requirements & Dependencies
 
@@ -33,8 +33,8 @@ ansible-galaxy collection install --requirements-file collections.yml
 
 * ArchLinux
 * Debian based
-    - Debian 10 / 11
-    - Ubuntu 20.04
+    - Debian 11 / 12
+    - Ubuntu 20.04 / 22.04
 
 > **RedHat-based systems are no longer officially supported! May work, but does not have to.**
 
@@ -98,6 +98,20 @@ monit_services:
 ```bash
 curl -u foo:bar "localhost:2812/_status?format=json&level=full"
 ```
+
+---
+
+## Contribution
+
+Please read [Contribution](CONTRIBUTING.md)
+
+## Development,  Branches (Git Tags)
+
+The `master` Branch is my *Working Horse* includes the "latest, hot shit" and can be complete broken!
+
+If you want to use something stable, please use a [Tagged Version](https://github.com/bodsch/ansible-monit/-/tags)!
+
+---
 
 ## Author and License
 
